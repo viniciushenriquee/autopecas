@@ -20,6 +20,7 @@ public class PedidoService {
 
     @Transactional
     public Pedido criarPedido(Pedido pedido) {
+        // Para cada item no pedido, vamos verificar o estoque
         for (ItemPedido item : pedido.getItens()) {
             Produto produto = produtoRepository.findById(item.getProduto().getId_produto())
                     .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
@@ -28,11 +29,12 @@ public class PedidoService {
                 throw new RuntimeException("Estoque insuficiente para o produto: " + produto.getNome());
             }
 
-            // AQUI ESTAVA O ERRO: setEstoqueAtual em vez de setEstoque
+            // Atualiza o estoque do produto
             produto.setEstoqueAtual(produto.getEstoqueAtual() - item.getQuantidade());
             produtoRepository.save(produto);
         }
 
+        // Salva o pedido no banco
         return pedidoRepository.save(pedido);
     }
 }
