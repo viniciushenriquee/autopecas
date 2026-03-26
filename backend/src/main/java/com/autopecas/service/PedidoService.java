@@ -1,8 +1,7 @@
 package com.autopecas.service;
 
-import com.autopecas.model.ItemPedido;
-import com.autopecas.model.Pedido;
-import com.autopecas.model.Produto;
+import com.autopecas.model.*;
+import com.autopecas.repository.FinanceiroRepository;
 import com.autopecas.repository.PedidoRepository;
 import com.autopecas.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,9 @@ public class PedidoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private FinanceiroRepository financeiroRepository;
 
     @Transactional
     public Pedido criarPedido(Pedido pedido) {
@@ -35,6 +37,16 @@ public class PedidoService {
         }
 
         // Salva o pedido no banco
-        return pedidoRepository.save(pedido);
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        // Registra a movimentação no financeiro
+        Financeiro financeiro = new Financeiro();
+        financeiro.setPedido(pedidoSalvo);
+        financeiro.setValor(pedidoSalvo.getValorTotal());
+        financeiro.setTipo(TipoMovimentacao.Receita);
+        financeiro.setDescricao("Venda - Pedido #" + pedidoSalvo.getId_pedido());
+        financeiroRepository.save(financeiro);
+
+        return pedidoSalvo;
     }
 }

@@ -1,6 +1,7 @@
 package com.autopecas.service;
 
 import com.autopecas.model.*;
+import com.autopecas.repository.FinanceiroRepository;
 import com.autopecas.repository.PedidoRepository;
 import com.autopecas.repository.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +29,11 @@ public class PedidoServiceTest {
     @Mock
     private ProdutoRepository produtoRepository;
 
+    @Mock
+    private FinanceiroRepository financeiroRepository;
+
     @InjectMocks
-    private PedidoService pedidoService; // Isso vai dar erro de compilação!
+    private PedidoService pedidoService;
 
     private Pedido pedido;
     private Produto produto;
@@ -82,7 +86,7 @@ public class PedidoServiceTest {
             return p;
         });
 
-        // Chamada do método que ainda não existe (Green step virá depois)
+        // Chamada do método
         Pedido pedidoCriado = pedidoService.criarPedido(pedido);
 
         // Verificações (Assertions)
@@ -90,9 +94,10 @@ public class PedidoServiceTest {
         assertEquals(1L, pedidoCriado.getId_pedido());
         assertEquals(new BigDecimal("200.00"), pedidoCriado.getValorTotal());
         
-        // Verifica se salvou o produto (para dar baixa no estoque) e o pedido
+        // Verifica se salvou o produto (para dar baixa no estoque), o pedido e o financeiro
         verify(produtoRepository, times(1)).save(any(Produto.class));
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
+        verify(financeiroRepository, times(1)).save(any(Financeiro.class));
     }
 
     @Test

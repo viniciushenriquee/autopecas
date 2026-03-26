@@ -1,5 +1,6 @@
 package com.autopecas.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_item;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
