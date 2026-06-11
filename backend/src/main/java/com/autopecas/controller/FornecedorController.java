@@ -2,7 +2,8 @@ package com.autopecas.controller;
 
 import com.autopecas.model.Fornecedor;
 import com.autopecas.service.FornecedorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/fornecedores")
+@RequiredArgsConstructor
 public class FornecedorController {
 
-    @Autowired
-    private FornecedorService fornecedorService;
+    private final FornecedorService fornecedorService;
 
     @GetMapping
-    public List<Fornecedor> listar() {
-        return fornecedorService.listarTodos();
+    public ResponseEntity<List<Fornecedor>> listar() {
+        return ResponseEntity.ok(fornecedorService.listarTodos());
     }
 
     @GetMapping("/{id}")
@@ -28,8 +29,8 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public Fornecedor criar(@RequestBody Fornecedor fornecedor) {
-        return fornecedorService.salvar(fornecedor);
+    public ResponseEntity<Fornecedor> criar(@RequestBody Fornecedor fornecedor) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorService.salvar(fornecedor));
     }
 
     @DeleteMapping("/{id}")

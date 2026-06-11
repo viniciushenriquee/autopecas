@@ -2,7 +2,8 @@ package com.autopecas.controller;
 
 import com.autopecas.model.Produto;
 import com.autopecas.service.ProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produtos")
+@RequiredArgsConstructor
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService produtoService;
 
     @GetMapping
-    public List<Produto> listar() {
-        return produtoService.listarTodos();
+    public ResponseEntity<List<Produto>> listar() {
+        return ResponseEntity.ok(produtoService.listarTodos());
     }
 
     @GetMapping("/{id}")
@@ -28,8 +29,8 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto criar(@RequestBody Produto produto) {
-        return produtoService.salvar(produto);
+    public ResponseEntity<Produto> criar(@RequestBody Produto produto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
     }
 
     @DeleteMapping("/{id}")

@@ -1,23 +1,22 @@
-
 package com.autopecas.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cliente")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_cliente;
+    @Column(name = "id_cliente")
+    private Long idCliente;
 
     @Column(nullable = false, length = 100)
     private String nome;
@@ -40,4 +39,16 @@ public class Cliente {
 
     @Column(name = "data_cadastro", insertable = false, updatable = false)
     private LocalDate dataCadastro;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cliente cliente)) return false;
+        return idCliente != null && idCliente.equals(cliente.getIdCliente());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

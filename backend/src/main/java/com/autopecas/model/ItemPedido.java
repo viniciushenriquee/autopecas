@@ -2,22 +2,22 @@ package com.autopecas.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "itens_pedido")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_item;
+    @Column(name = "id_item")
+    private Long idItem;
 
     @JsonBackReference
     @ManyToOne
@@ -36,4 +36,16 @@ public class ItemPedido {
 
     @Column(nullable = false)
     private BigDecimal subtotal;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemPedido that)) return false;
+        return idItem != null && idItem.equals(that.getIdItem());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

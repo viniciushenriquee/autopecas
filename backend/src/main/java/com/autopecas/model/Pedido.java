@@ -2,9 +2,7 @@ package com.autopecas.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,14 +10,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "pedido")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_pedido;
+    @Column(name = "id_pedido")
+    private Long idPedido;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
@@ -40,6 +40,18 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pedido pedido)) return false;
+        return idPedido != null && idPedido.equals(pedido.getIdPedido());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

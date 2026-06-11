@@ -2,21 +2,33 @@ package com.autopecas.controller;
 
 import com.autopecas.model.Pedido;
 import com.autopecas.service.PedidoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pedidos")
+@RequiredArgsConstructor
 public class PedidoController {
 
-    @Autowired
-    private PedidoService pedidoService;
+    private final PedidoService pedidoService;
 
     @PostMapping
     public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
         Pedido novoPedido = pedidoService.criarPedido(pedido);
-        return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoPedido);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Pedido>> listarTodos() {
+        return ResponseEntity.ok(pedidoService.listarTodos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> obterPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.obterPorId(id));
     }
 }

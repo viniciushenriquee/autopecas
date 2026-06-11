@@ -2,7 +2,8 @@ package com.autopecas.controller;
 
 import com.autopecas.model.Cliente;
 import com.autopecas.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
+@RequiredArgsConstructor
 public class ClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> listar() {
-        return clienteService.listarTodos();
+    public ResponseEntity<List<Cliente>> listar() {
+        return ResponseEntity.ok(clienteService.listarTodos());
     }
 
     @GetMapping("/{id}")
@@ -28,8 +29,8 @@ public class ClienteController {
     }
 
     @PostMapping
-    public Cliente criar(@RequestBody Cliente cliente) {
-        return clienteService.salvar(cliente);
+    public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvar(cliente));
     }
 
     @DeleteMapping("/{id}")

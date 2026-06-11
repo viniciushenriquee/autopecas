@@ -6,9 +6,12 @@ C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\model\Stat
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\service\UsuarioService.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\repository\ProdutoRepository.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\service\ProdutoService.java
+C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\service\CompraService.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\model\Fornecedor.java
+C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\controller\CompraController.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\controller\PedidoController.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\model\Cliente.java
+C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\service\FinanceiroService.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\AutoPecasApplication.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\model\Compra.java
 C:\Users\vinic\Projetos\autopecas\backend\src\main\java\com\autopecas\model\TipoMovimentacao.java

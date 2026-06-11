@@ -2,22 +2,25 @@ package com.autopecas.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "financeiro")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Financeiro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_financeiro;
+    @Column(name = "id_financeiro")
+    private Long idFinanceiro;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -39,4 +42,16 @@ public class Financeiro {
     @ManyToOne
     @JoinColumn(name = "id_compra")
     private Compra compra;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Financeiro that)) return false;
+        return idFinanceiro != null && idFinanceiro.equals(that.getIdFinanceiro());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
