@@ -1,5 +1,6 @@
 package com.autopecas.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,10 @@ public class Compra {
     @Column(nullable = false)
     private StatusCompra status;
 
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<ItemCompra> itens;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
     private List<ItemCompra> itens;
 }
