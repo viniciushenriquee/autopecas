@@ -1,9 +1,7 @@
 package com.autopecas.service;
 
 import com.autopecas.model.*;
-import com.autopecas.repository.FinanceiroRepository;
 import com.autopecas.repository.PedidoRepository;
-import com.autopecas.repository.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +25,10 @@ public class PedidoServiceTest {
     private PedidoRepository pedidoRepository;
 
     @Mock
-    private ProdutoRepository produtoRepository;
+    private ProdutoService produtoService;
 
     @Mock
-    private FinanceiroRepository financeiroRepository;
+    private FinanceiroService financeiroService;
 
     @InjectMocks
     private PedidoService pedidoService;
@@ -43,15 +41,15 @@ public class PedidoServiceTest {
     @BeforeEach
     void setUp() {
         cliente = new Cliente();
-        cliente.setId_cliente(1L);
+        cliente.setIdCliente(1L);
         cliente.setNome("Cliente Teste");
 
         vendedor = new Usuario();
-        vendedor.setId_usuario(1L);
+        vendedor.setIdUsuario(1L);
         vendedor.setNome("Vendedor Teste");
 
         produto = new Produto();
-        produto.setId_produto(1L);
+        produto.setIdProduto(1L);
         produto.setNome("Peça Teste");
         produto.setPrecoVenda(new BigDecimal("100.00"));
         produto.setEstoqueAtual(10);
@@ -77,12 +75,12 @@ public class PedidoServiceTest {
     @Test
     void criarPedidoComSucesso() {
         // Simulando que o produto existe no banco
-        when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
+        when(produtoService.buscarPorId(1L)).thenReturn(Optional.of(produto));
         
         // Simulando o salvamento do pedido (retorna o pedido com ID 1)
         when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> {
             Pedido p = invocation.getArgument(0);
-            p.setId_pedido(1L);
+            p.setIdPedido(1L);
             return p;
         });
 
@@ -91,19 +89,19 @@ public class PedidoServiceTest {
 
         // Verificações (Assertions)
         assertNotNull(pedidoCriado);
-        assertEquals(1L, pedidoCriado.getId_pedido());
+        assertEquals(1L, pedidoCriado.getIdPedido());
         assertEquals(new BigDecimal("200.00"), pedidoCriado.getValorTotal());
         
         // Verifica se salvou o produto (para dar baixa no estoque), o pedido e o financeiro
-        verify(produtoRepository, times(1)).save(any(Produto.class));
+        verify(produtoService, times(1)).salvar(any(Produto.class));
         verify(pedidoRepository, times(1)).save(any(Pedido.class));
-        verify(financeiroRepository, times(1)).save(any(Financeiro.class));
+        verify(financeiroService, times(1)).registrarMovimentacao(any(Financeiro.class));
     }
 
     @Test
     void criarPedidoSemEstoqueDeveLancarExcecao() {
         produto.setEstoqueAtual(1); // Só tem 1, mas o pedido quer 2
-        when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
+        when(produtoService.buscarPorId(1L)).thenReturn(Optional.of(produto));
 
         // Esperamos que o sistema lance uma exceção se não houver estoque
         assertThrows(RuntimeException.class, () -> pedidoService.criarPedido(pedido));

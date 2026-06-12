@@ -41,21 +41,21 @@ public class PedidoControllerTest {
     @BeforeEach
     void setUp() {
         cliente = new Cliente();
-        cliente.setId_cliente(1L);
+        cliente.setIdCliente(1L);
         cliente.setNome("Cliente Teste");
 
         vendedor = new Usuario();
-        vendedor.setId_usuario(1L);
+        vendedor.setIdUsuario(1L);
         vendedor.setNome("Vendedor Teste");
 
         produto = new Produto();
-        produto.setId_produto(1L);
+        produto.setIdProduto(1L);
         produto.setNome("Peça Teste");
         produto.setPrecoVenda(new BigDecimal("100.00"));
         produto.setEstoqueAtual(10);
 
         pedido = new Pedido();
-        pedido.setId_pedido(1L);
+        pedido.setIdPedido(1L);
         pedido.setCliente(cliente);
         pedido.setVendedor(vendedor);
         pedido.setStatus(StatusPedido.Aberto);
@@ -81,7 +81,7 @@ public class PedidoControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(pedido)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id_pedido").value(1L))
+                .andExpect(jsonPath("$.idPedido").value(1L))
                 .andExpect(jsonPath("$.valorTotal").value(200.00));
     }
 }
